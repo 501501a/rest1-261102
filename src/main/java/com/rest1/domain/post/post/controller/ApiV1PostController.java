@@ -109,7 +109,7 @@ public class ApiV1PostController {
         postService.modify(post, reqBody.title, reqBody.content);
 
         return new RsData<>(
-                "201-1",
+                "200-1",
                 "%d번 게시물이 수정되었습니다.".formatted(id)
         );
     }

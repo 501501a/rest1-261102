@@ -68,15 +68,15 @@ public class ApiV1CommentController {
 
     record CommentWriteResBody(
             CommentDto commentDto
-    ) {
-    }
+    ) {}
 
     @PostMapping("/{postId}/comments")
     @Transactional
     public RsData<CommentWriteResBody> createItem(
-            @PathVariable long postId,
+            @PathVariable Long postId,
             @RequestBody @Valid CommentWriteReqBody reqBody
     ) {
+
         Post post = postService.findById(postId).get();
         Comment comment = postService.writeComment(post, reqBody.content);
 
@@ -84,9 +84,9 @@ public class ApiV1CommentController {
 
         return new RsData<>(
                 "201-1",
-                "%d번 댓글이 생성되었습니다.".formatted(post.getId()),
+                "%d번 댓글이 생성되었습니다.".formatted(comment.getId()),
                 new CommentWriteResBody(
-                        new CommentDto(comment)
+                        new  CommentDto(comment)
                 )
         );
     }
@@ -99,19 +99,21 @@ public class ApiV1CommentController {
     ) {
     }
 
-    @PostMapping("/{postId}/comments")
+    @PutMapping("/{postId}/comments/{commentId}")
     @Transactional
-    public RsData<Void> createItem(
-            @PathVariable long postId,
-            @PathVariable long commentId,
+    public RsData<Void> modifyItem(
+            @PathVariable Long postId,
+            @PathVariable Long commentId,
             @RequestBody @Valid CommentWriteReqBody reqBody
     ) {
+
         Post post = postService.findById(postId).get();
         postService.modifyComment(post, commentId, reqBody.content);
 
         return new RsData<>(
-                "201-1",
-                "%d번 댓글이 수정되었습니다.".formatted(commentId)
+                "200-1",
+                ("%d번 댓글이 수정되었습니다.").formatted(commentId)
         );
     }
+
 }
